@@ -20,6 +20,7 @@ import {getKey} from "../lib/util";
 
 function Todo() {
   const [items, putItems] = useStorage();
+  const [tab, setTab] = useState('すべて')
 
   const handleAdd = (text) => {
     const newsItems = [...items, { key: getKey(), text: text, done: false }]
@@ -36,16 +37,33 @@ function Todo() {
     putItems(newItems);
   };
 
-  const [state, setState] = useState('hidden');
-  const [data, setData] = useState('');
-
-  const onAddItems = (data) => {
-    putItems(items.push({
-      key: getKey(),
-      text: data,
-      done: false
-    }));
+  const handleFilterChange = (text) => {
+    setTab(text)
   }
+
+  const displayItems = () => {
+    let newItems;
+    if (tab === 'すべて') {
+      newItems = items.filter(item => {
+        return true;
+      });
+    }
+
+    if (tab === '未完了') {
+      newItems = items.filter(item => {
+        return !item.done;
+      });
+    }
+
+    if (tab === '完了済み') {
+      newItems = items.filter(item => {
+        return item.done;
+      });
+    }
+
+    return newItems;
+  }
+
 
   return (
     <div className="panel">
@@ -53,13 +71,17 @@ function Todo() {
         ITSS ToDoアプリ
       </div>
        <Input handleAdd={handleAdd} />
-      {items.map(item => (
+      <Filter handleFilterChange={handleFilterChange} />
+      {displayItems().map(item => (
         <TodoItem 
+          handleCheck = {handleCheck}
           key={item.key}
           item={item}
-          onCheck = {handleCheck}
         />
       ))}
+       <div className="panel-block">
+        {displayItems().length} items
+      </div>
     </div>  
   );
 }
