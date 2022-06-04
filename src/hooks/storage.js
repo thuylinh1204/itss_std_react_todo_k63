@@ -38,7 +38,8 @@ function useStorage() {
   };
 
   const clearItems = () => {
-    
+     localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    setItems([]);
   };
 
   return [items, putItems, clearItems];

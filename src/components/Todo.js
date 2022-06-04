@@ -19,7 +19,7 @@ import useStorage from '../hooks/storage';
 import {getKey} from "../lib/util";
 
 function Todo() {
-  const [items, putItems] = useStorage();
+  const [items, putItems, clearItems] = useStorage();
   const [tab, setTab] = useState('すべて')
 
   const handleAdd = (text) => {
@@ -81,6 +81,11 @@ function Todo() {
       ))}
        <div className="panel-block">
         {displayItems().length} items
+      </div>
+      <div className="panel-block">
+        <button className="button is-light is-fullwidth" onClick={clearItems}>
+          全部のToDoを削除
+        </button>
       </div>
     </div>  
   );
